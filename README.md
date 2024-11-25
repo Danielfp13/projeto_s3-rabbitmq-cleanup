@@ -1,7 +1,7 @@
 
-# User Management Service with AWS S3, RabbitMQ, and Spring Boot
+# Serviço de Cadastro de Usuários com AWS S3, RabbitMQ e Spring Boot
 
-Este é um projeto que combina Spring Boot com AWS S3, RabbitMQ, PostgreSQL e outras tecnologias para criar um serviço de gerenciamento de usuários. Ele suporta upload de imagens, envio de emails, integração com filas RabbitMQ e agendamento de tarefas.
+Este é um projeto que combina Spring Boot com AWS S3, RabbitMQ, PostgreSQL e outras tecnologias para criar um serviço de cadastro de usuários. Ele suporta upload de imagens, envio de emails, integração com filas RabbitMQ e agendamento de tarefas.
 
 ---
 
@@ -27,6 +27,7 @@ Este é um projeto que combina Spring Boot com AWS S3, RabbitMQ, PostgreSQL e ou
 3. **RabbitMQ** rodando localmente ou em um servidor acessível.
 4. **PostgreSQL** configurado com um banco de dados criado.
 5. Variáveis de ambiente configuradas (detalhadas abaixo).
+6. **AWS S3** configurado para upload de imagens.
 
 ---
 
@@ -47,13 +48,14 @@ Crie um arquivo `.env` ou use variáveis de ambiente para configurar as seguinte
 | Variável            | Descrição                             |
 |---------------------|---------------------------------------|
 | `DB_HOST`           | Endereço do banco de dados PostgreSQL |
-| `DB_PORT`           | Porta do PostgreSQL (padrão: 5432)   |
-| `DB_USERNAME`       | Nome de usuário do banco             |
-| `DB_PASSWORD`       | Senha do banco                       |
-| `AWS_ACCESS_KEY`    | Chave de acesso da AWS               |
-| `AWS_SECRET_KEY`    | Chave secreta da AWS                 |
-| `MAIL_USERNAME`     | Usuário para envio de e-mails (Gmail)|
-| `MAIL_PASSWORD`     | Senha do e-mail                      |
+| `DB_PORT`           | Porta do PostgreSQL (padrão: 5432)    |
+| `DB_USERNAME`       | Nome de usuário do banco              |
+| `DB_PASSWORD`       | Senha do banco                        |
+| `AWS_ACCESS_KEY`    | Chave de acesso da AWS                |
+| `AWS_SECRET_KEY`    | Chave secreta da AWS                  |
+| `EMAIL_USERNAME`    | Usuário para envio de e-mails (Gmail) |
+| `EMAIL_PASSWORD`    | Senha do e-mail                       |
+| `APP_PROFILE`       | Perfil da aplicação                   |
 
 ---
 
@@ -88,14 +90,11 @@ Crie um arquivo `.env` ou use variáveis de ambiente para configurar as seguinte
 POST /api/users/upload
 Content-Type: multipart/form-data
 
-{
-  "user": {
-    "name": "Daniel",
-    "email": "daniel@example.com",
-    "password": "123456"
-  },
-  "image": <arquivo_imagem>
-}
+Body (form-data):
+- name: user
+- email: user@email.com
+- password: 123456
+- image: <foto-perfil.jpg>
 ```
 
 ---
@@ -113,16 +112,6 @@ Content-Type: multipart/form-data
 
 ---
 
-## **Testes**
-
-### **Executando os Testes**
-
-```bash
-mvn test
-```
-
----
-
 ## **Estrutura do Projeto**
 
 ```plaintext
@@ -131,7 +120,7 @@ src
 │   ├── java
 │   │   └── com.daniel.s3
 │   │       ├── config       # Configurações da aplicação (S3, RabbitMQ, etc.)
-│   │       ├── entitites    # Classes de modelo (Entidades do JPA)
+│   │       ├── entities     # Classes de modelo (Entidades do JPA)
 │   │       ├── messaging    # Consumidores de mensagens do RabbitMQ
 │   │       ├── repositories # Repositórios de acesso ao banco de dados
 │   │       ├── resources    # Endpoints REST
@@ -139,7 +128,14 @@ src
 │   │       └── services     # Lógica de negócios
 │   └── resources
 │       ├── application.yml  # Configurações da aplicação
-│       └── static           # Arquivos estáticos (se necessário)
+|       ├── application-test.yml  # Configurações da aplicação de teste  
+|       ├── application-prod.yml  # Configurações da aplicação em produção
+│       ├── db
+            └── migration
+                └──V1__create_user_table.sql #DDL para o flyway
+
+            
+|        
 ```
 
 ---
@@ -165,10 +161,10 @@ src
 
 ## **Licença**
 
-Este projeto é livre para uso e modificação. Consulte o arquivo `LICENSE` para mais detalhes.
+Este projeto é livre para uso e modificação.
 
 ---
 
 ### **Autor**
 
-- [Seu Nome](https://github.com/seuusername)
+- [Daniel Fernando Pereira](https://github.com/seuusername)
