@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/tb_user
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  rabbitmq:
+    host: rabbitmq  # Nome do serviço no docker-compose
+    port: 5672
+    username: guest  # Usuário padrão do RabbitMQ
+    password: guest  # Senha padrão do RabbitMQ
+
+
+
+
+
+
+
+
+
+
+

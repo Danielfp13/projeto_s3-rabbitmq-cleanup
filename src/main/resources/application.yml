@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: ${APP_PROFILE:test}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+  servlet:
+    multipart:
+      enabled: true
+aws:
+  s3:
+    bucket-name: user-images-s3
+    region: us-east-1
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+rabbitmq:
+  queue:
+    name: welcome-emails
